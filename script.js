@@ -25,7 +25,19 @@ function StockManagementApp() {
     } else if (field === 'searchTerm') {
       setSearchTerm(value);
     } else {
-      setNewItem((prev) => ({ ...prev, [field]: value }));
+      setNewItem((prev) => {
+        if (field === 'price') {
+          // Allow empty string or valid number for price
+          const newValue = value === '' ? '' : parseFloat(value);
+          return { ...prev, [field]: isNaN(newValue) ? prev[field] : newValue };
+        } else if (field === 'quantity') {
+          // Allow empty string or valid integer for quantity
+          const newValue = value === '' ? '' : parseInt(value, 10);
+          return { ...prev, [field]: isNaN(newValue) ? prev[field] : newValue };
+        } else {
+          return { ...prev, [field]: value };
+        }
+      });
     }
   };
 
